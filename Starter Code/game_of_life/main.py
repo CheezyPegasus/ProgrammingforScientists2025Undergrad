@@ -15,7 +15,6 @@ def pygame_surface_to_numpy(surface: pygame.Surface) -> numpy.ndarray:
     """
     return None  # TODO: implement
 
-
 def main():
     print("Coding the Game of Life!")
 

@@ -16,6 +16,10 @@ def draw_game_board(board: GameBoard, cell_width: int) -> pygame.Surface:
         raise ValueError("cell_width must be a positive integer.")
     if not isinstance(board, list) or len(board) == 0:
         raise ValueError("board must be a non-empty 2D list.")
+    
+
+    # pygame.draw(circle, white, (int(x), int(y)),radius);
+    
     return pygame.Surface((1, 1))  # TODO: implement
 
 
@@ -31,3 +35,4 @@ def draw_game_boards(boards: list[GameBoard], cell_width: int) -> list[pygame.Su
     if not isinstance(boards, list) or len(boards) == 0:
         raise ValueError("boards must be a non-empty list.")
     return []  # TODO: implement
+
