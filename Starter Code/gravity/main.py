@@ -29,6 +29,22 @@ def main():
       4) encode frames to an MP4 video
     """
     print("Let's simulate gravity!")
+    
+    if len(sys.argv) != 6:
+        raise ValueError("Error: incorrect number of parameters.")
+    
+    scenario = sys.argv[1]
+
+    input_file = f"data/{scenario}.txt"
+    input_file = f"output/{scenario}.mp4"
+
+    initial_universe = read_universe(input_file)
+
+    time_points = simulate_gravity(initial_universe,num_gens,time_step)
+
+    canvas_width = 15000
+    u = read_universe("data/butterfly.txt")
+    
 
 if __name__ == "__main__":
     main()

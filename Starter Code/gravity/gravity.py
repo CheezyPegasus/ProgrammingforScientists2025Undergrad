@@ -17,7 +17,11 @@ def simulate_gravity(initial_universe: Universe, num_gens: int, time: float) -> 
         A list of Universe snapshots of length num_gens + 1.
     """
     # TODO: add code here
-    pass
+    time_points = [initial_universe]
+
+    for i in range(1,num_gens+1):
+        updated = update_universe(time_points[i-1],time)
+        time_points.append(updated)
 
 
 def update_universe(current_universe: Universe, time: float) -> Universe:
@@ -36,7 +40,36 @@ def update_universe(current_universe: Universe, time: float) -> Universe:
     """
 
     # TODO: add code here
-    pass
+    
+    new_universe = copy_universe(current_universe);
+    
+    old_acc = b.acceleration
+    old_vel = b.velocity
+
+    for b in new_universe.bodies:
+        b.acceleration = update_acceleration(current_universe,b)
+        b.velocity = update_velocity(b,old_acc,time)
+        b.position = update_position(b,old_acc,old_vel,time)
+        
+
+    return new_universe
+
+def copy_universe(current_universe:Universe)->Universe:
+    new_bodies = []
+    for b in current_universe.bodies:
+        new_bodies.append(copy_body(b))
+
+    return Universe(new_bodies, current_Universe_width)
+
+def copy_body(b.body) -> Body:
+    new_body = Body(
+        b.name, b.mass, b.radius,
+        OrderedPair(b.position.x,b.position.y),
+        OrderedPair(b.velocity.x,b.velocity.y),
+        OrderedPair(b.acceleration.x,b.acceleration.y),
+        b.red,b.greeb,b.blue
+    )
+
 
 def update_acceleration(current_universe: Universe, b: Body) -> OrderedPair:
     """
@@ -54,9 +87,37 @@ def update_acceleration(current_universe: Universe, b: Body) -> OrderedPair:
         OrderedPair: A 2D vector (ax, ay) representing the updated acceleration.
     """
 
-    # TODO: add code here
-    pass
+    net_force = compute_net_force(current_universe,b)
+    ax = net_force.x / b.mass
+    ay = net_force.y / b.mass
 
+    return OrderedPair(ax,ay)
+
+def compute_net_force(current_universe: Universe, b:Body) -> OrderedPair:
+    net_force = OrderedPair(0.0,0.0)
+    
+    G = Universe.gravitational_constant
+
+    for current_body in current_universe.bodies:
+        if not(current_body is b):
+            current_force = compute_force(b,current_body)
+            net_force.x += current_force.x
+            net_force.y += current_force.y
+    return net_force
+
+def calculate_force():
+    d = distance(b1.positiion,b2.position)
+
+    F_magnitude = G * b1.mass * b2.mass / (d**2);
+
+    dx = b2.position.x - b1.position.x
+    dy = b2.position.y - b1.position.y
+    fx = F_magnitude * (dx / d)
+    fy = F_magnitude * (dy/d)
+
+    if d == 0:
+        return OrderedPair(0.0,0.0)
+    
 def update_velocity(b: Body, old_acceleration: OrderedPair, time: float) -> OrderedPair:
     """
     Update velocity using average acceleration over the step.

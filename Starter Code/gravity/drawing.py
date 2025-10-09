@@ -8,6 +8,10 @@ import imageio
 import numpy as np  # for surface to numpy arrays
 from datatypes import Body, OrderedPair, Universe
 
+# Python does not have constants.
+# WRITE IN ALL CAPS
+
+JUPITER_MOON_MULTIPLIER = 10.0
 
 # Drawing functions
 
@@ -84,12 +88,16 @@ def animate_system(
         raise ValueError("drawing_frequency must be a positive integer")
 
     # TODO: add code here
-    pass
+    surfaces = []
+
+    for u in time_points:
+        current_surface = draw_to_canvas(u,canvas_width)
+        surfaces.append(current_surface)
 
 def draw_to_canvas(
     u: Universe,
     canvas_width: int,
-    trails: dict[int, list[OrderedPair]],
+    # trails: dict[int, list[OrderedPair]],
 ) -> pygame.Surface:
     """
     Draw a single Universe snapshot onto a new pygame Surface.
@@ -99,8 +107,20 @@ def draw_to_canvas(
         raise TypeError("u must be a Universe")
     if not isinstance(canvas_width, int) or canvas_width <= 0:
         raise ValueError("canvas_width must be a positive integer")
-    if not isinstance(trails, dict):
-        raise TypeError("trails must be a dict[int, list[OrderedPair]]")
+    # if not isinstance(trails, dict):
+    #    raise TypeError("trails must be a dict[int, list[OrderedPair]]")
 
-    # TODO: add code here
-    pass
+    surface = pygame.Surface((canvas_width,canvas_width))
+    surface.fill((255,255,255))
+
+    for b in u.bodies:
+        color = (b.red,b.green,b.blue);
+        center_x = int((b.position.x)/u.width * canvas_width)
+        center_y = int((b.position.y)/u.width * canvas_width)
+        radius = int((b.radius)/u.width * canvas_width)
+
+        if b.name in ("Io", "Ganemede", "Europa", "Callisto"):
+            radius *= JUPITER_MOON_MULTIPLIER
+        pygame.draw.circle(surface, color, (center_x, center_y), int(radius))
+    
+    return surface
