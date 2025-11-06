@@ -1,4 +1,5 @@
 from datatypes import Node, Tree, DistanceMatrix
+import Self
 
 def upgma(mtx: DistanceMatrix, species_names: list[str]) -> Tree:
     """
@@ -16,8 +17,19 @@ def upgma(mtx: DistanceMatrix, species_names: list[str]) -> Tree:
         Tree: A list of `Node` objects representing the full UPGMA tree.
               Conventionally, the last node (index -1) is the root.
     """
-    #TODO: Implement
-    pass
+    
+    DistanceMatrix = list[list[float]]
+
+    Tree = list[Node]
+    @dataclass
+    class Node:
+        num : int = 0;
+        age : float = 0.0
+        label:str = ""
+        # child1: Node = None  <--  won't work; bruh
+        # recursive class definition, Python won't like it
+        child1: Self | None = None
+        child2: Self | None = None
 
 
 def assert_square_matrix(mtx: DistanceMatrix) -> None:
@@ -30,8 +42,29 @@ def assert_square_matrix(mtx: DistanceMatrix) -> None:
     Raises:
         ValueError: If the matrix is not square.
     """
-    #TODO: Implement
-    pass
+    num_rows = len(mtx);
+
+    for r in range(num_rows):
+        if (len(mtx[r]) != num_rows):
+            raise ValueError("wtf man.")
+
+def assert_square_matrix(mtx: DistanceMatrix, species_names:DistanceMatrix) -> None:
+    """
+    Validate that a distance matrix is square.
+
+    Args:
+        mtx (DistanceMatrix): The matrix to validate.
+
+    Raises:
+        ValueError: If the matrix is not square.
+    """
+    num_rows = len(mtx);
+
+    for r in range(num_rows):
+        if (len(mtx[r]) != num_rows):
+            raise ValueError("wtf man.")
+
+
 
 
 def assert_same_number_species(mtx: DistanceMatrix, species_names: list[str]) -> None:
@@ -45,8 +78,9 @@ def assert_same_number_species(mtx: DistanceMatrix, species_names: list[str]) ->
     Raises:
         ValueError: If their sizes do not match.
     """
-    #TODO: Implement
-    pass
+    assert_square_matrix(mtx);
+    assert_same_number_species(mtx,species_names)
+
 
 
 def add_row_col(row: int, col: int, cluster_size1: int, cluster_size2: int, mtx: DistanceMatrix) -> DistanceMatrix:
@@ -67,8 +101,7 @@ def add_row_col(row: int, col: int, cluster_size1: int, cluster_size2: int, mtx:
     Returns:
         DistanceMatrix: The matrix with the new cluster appended as the last row/column.
     """
-    #TODO: Implement
-    pass
+    
 
 def delete_clusters(clusters: list[Node], row: int, col: int) -> list[Node]:
     """
@@ -137,8 +170,13 @@ def initialize_tree(species_names: list[str]) -> Tree:
     Returns:
         Tree: The preallocated list of `Node` objects used by UPGMA.
     """
-    #TODO: Implement
-    pass
+    num_leaves = len(species_names)
+
+    t:Tree = [];
+
+    for i in range(2*num_leaves - 1):
+        v = Node(num = 1);
+        t.append(v);
 
 
 def initialize_clusters(t: Tree) -> list[Node]:
@@ -151,5 +189,9 @@ def initialize_clusters(t: Tree) -> list[Node]:
     Returns:
         list[Node]: The first n nodes of `t`, corresponding to the leaves.
     """
-    #TODO: Implement
-    pass
+    clusters: list[Node] = [];
+
+for i in range(num_leaves):
+    clusters.append(t[i]);
+
+return clusters;

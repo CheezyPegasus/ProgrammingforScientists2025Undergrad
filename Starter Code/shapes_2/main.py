@@ -3,6 +3,9 @@
 
 # place class declarations between imports and def main
 
+from dataclasses import dataclass
+
+# @dataclass
 class Rectangle:
     """
     Represents a 2D rectangle with width, height, position, and rotation
@@ -39,6 +42,19 @@ class Rectangle:
     def __repr__(self) -> str:
         # let's have a nice f string to print the attributes 
         return f"Rectangle(width={self.width},height={self.height},x1={self.x1}, y1={self.y1}, rotation={self.rotation})"
+    
+    def area(self) -> float:
+        return self.height * self.width;
+    
+    def translate(self, x,y)->None:
+        self.x1 = x;
+        self.y1 = y;
+    
+    def dialate(self, scale:float)->None:
+        if scale == 0:
+            exit;
+        self.height *= scale
+        self.width *= scale
 
 class Circle:
     """
@@ -64,11 +80,50 @@ class Circle:
 
     def __repr__(self) -> str:
         # let's have a nice f string to print the attributes 
-        return f"Circle(x1={self.x1}, y1={self.y1}, radius={self.radius})"
+        return f"Circle(x1 = {self.x1}, y1 = {self.y1}, radius = {self.radius})"
+    
+    def area(self) -> float:
+        return self.radius ** 2 * 3.14159265;
+    
+    def translate(self, x,y)->None:
+        self.x1 = x;
+        self.y1 = y;
+    
+    def dialate(self, scale:float)->None:
+        if scale == 0:
+            exit;
+        self.radius *= scale
+
+def change_value(x:int) -> None:
+    print("Inside function before change: ", x, id(x))
+
+@dataclass
+class Node:
+    name: str = ""
+    age: float = 0.0
+
+@dataclass  
+class Tree:
+    nodes:list[Node] = None;
+    label:str = "";
+
+def tree_trouble():
+    t = Tree(nodes=[Node("A",1), Node("B",2)], label="This is T.")
+    print("Original t: ",t)
+
+    s = Tree()
+    s.label = t.label
+    s.nodes = t.nodes
+
+    print(s)
 
 
 def main():
-    print("Shapes.")
+    tree_trouble();
+
+
+def changes():
+    print("Shapes Part 2.")
 
     # these declarations create an INSTANCE of the object with the default attributes
     x1 = 1.0
@@ -79,19 +134,28 @@ def main():
     r = Rectangle(3.0, 5.0)  # some languages might get mad, Python never gets mad
     # other attributes of r get their defaults (0.0)
 
+    print(r.area())
+    print(my_circle.area())
+
+    my_circle.translate(2.5,-3.5)
+
+
+    print(my_circle)
+
+    my_circle.dialate(2)
+    print(my_circle.area())
+
+
+    r3 = Rectangle(r.width,r.height,r.x1,r.y1,r.rotation)
+    print(r,id(r))
+    print(r3,id(r3))
+
+
+
+
 
     """
-    # the baby is born and we can update its attributes 
-    my_circle.x1 = 1.0 
-    my_circle.y1 = 3.0
-    my_circle.radius = 2.0
-
-    r.width = 3.0
-    r.height = 5.0
-
-    r.name = "Larry"  # you can do this but don't do this
-    """
-
+    
     # let's print the whole thing 
     print("our rectangle is", r)
     print("our circle is", my_circle)
@@ -137,7 +201,7 @@ def main():
     # did I overwrite every circle's description?
     print("Every circle is", Circle.description)
 
-
+    """
 
 
 
